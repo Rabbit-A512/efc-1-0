@@ -1,0 +1,2 @@
+Click this link to confirm.
+{{ url_for('auth.change_email_confirm', username=user.username, token=token, _external=True) }}

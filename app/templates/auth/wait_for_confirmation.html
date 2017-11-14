@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}EFC - Waiting{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    Please input the email address which needs confirmation.
+</div>
+<div class="col-md-4">
+    {{ wtf.quick_form(form) }}
+</div>
+{% endblock %}

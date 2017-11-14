@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}EFC - Category Delete{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>删除某个课程类别</h1>
+    <p class="text-danger">删除类别操作会删除该类别的所有课程，请慎重。</p>
+</div>
+<div class="col-md-4">
+    {{ wtf.quick_form(form) }}
+</div>
+{% endblock %}

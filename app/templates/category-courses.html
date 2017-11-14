@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+{% for course in courses %}
+<div class="page-header">
+    <h1>{{ course.category.name }}</h1>
+</div>
+<ul class="list-inline">
+    <li><a href="{{ url_for('main.show_course', course_id=course.id, chapter_index=1) }}">{{ course.name }}</a></li>
+    {% if current_user.can(Permission.MODERATE_COURSES) %}
+    <li><a class="btn btn-danger" href="{{ url_for('admin.course_moderate', course_id=course.id) }}">修改课程信息</a></li>
+    <li><a class="btn btn-danger" href="{{ url_for('admin.course_delete', course_id=course.id) }}">删除课程</a></li>
+    {% endif %}
+</ul>
+{% endfor %}
+{% endblock %}

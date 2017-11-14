@@ -1,0 +1,19 @@
+<ul>
+    {% for comment in comments %}
+    <li>
+        <div>
+            <a href="{{ url_for('main.user', username=comment.author.username) }}">
+                <img class="img-rounded" src="{{ comment.author.gravatar(size=40) }}">
+            </a>
+            <a href="{{ url_for('main.user', username=comment.author.username) }}">
+                {{ comment.author.username }}
+            </a>
+        </div>
+        <div class="pull-right">{{ moment(comment.timestamp).fromNow() }}</div>
+        <div>{{ comment.body }}</div>
+        <div>课程名称：{{ comment.chapter.course.name }}</div>
+        <div>章节名称：{{ comment.chapter.name }}</div>
+        <hr>
+    </li>
+    {% endfor %}
+</ul>

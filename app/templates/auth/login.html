@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}EFC - Login{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Login</h1>
+</div>
+<div class="col-md-4">
+    {{ wtf.quick_form(form) }}
+    <p>
+        New user?
+        <a href="{{ url_for('auth.register') }}">
+            Click here to register
+        </a>
+    </p>
+    <p>
+        Forget your password?
+        <a href="{{ url_for('auth.wait_for_confirmation') }}">
+            Click here to find password
+        </a>
+    </p>
+</div>
+{% endblock %}

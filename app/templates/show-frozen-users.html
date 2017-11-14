@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<ul>
+    {% for user in frozen_users %}
+    <li>
+        <div>
+            <a href="{{ url_for('main.user', username=user.username) }}">
+                <img class="img-rounded" src="{{ user.gravatar(size=40) }}">
+            </a>
+            <a href="{{ url_for('main.user', username=user.username) }}">
+                {{ user.username }}
+            </a>
+        </div>
+        <div>
+            <a class="btn btn-danger" href="{{ url_for('admin.unfreeze', user_id=user.id) }}">解除冻结</a>
+        </div>
+        <hr>
+    </li>
+    {% else %}
+    <h3>没有被冻结的用户。</h3>
+    {% endfor %}
+</ul>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}InsaneImage{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>你好,
+        {% if current_user.is_authenticated %}
+            {{ current_user.username }}
+        {% else %}
+            陌生人
+        {% endif %}!
+    </h1>
+    {% if not current_user.is_authenticated %}
+    <h3><p>这是一个免费的课程分享网站，注册并登陆后即可获得所有资源。</p></h3>
+    {% else %}
+    <h3><p>点击你想学习的课程类别，寻找属于你的课程并立刻开始学习！</p></h3>
+    {% endif %}
+</div>
+{% if current_user.is_authenticated %}
+<div class="dropdown">
+    <button type="button" class="btn dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">课程分类
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+        {% for category in categories %}
+        <li role="presentation">
+            <a role="menuitem" tabindex="-1" href="{{ url_for('main.category_courses', id=category.id) }}">{{ category.name }}</a>
+            <a class="btn btn-danger" href="{{ url_for('admin.category_moderate', id=category.id) }}">修改课程类别信息</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+<p class="text-center"><a href="{{ url_for('main.info') }}">关于我们</a></p>
+{% endblock %}

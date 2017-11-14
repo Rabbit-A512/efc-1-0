@@ -1,0 +1,2 @@
+Dear {{ user.username }},
+{{ url_for('auth.confirm', token=token, _external=True) }}

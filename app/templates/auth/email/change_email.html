@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+Click this link to confirm.
+{{ url_for('auth.change_email_confirm', username=user.username, token=token, _external=True) }}
+</body>
+</html>

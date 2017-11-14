@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% set category = course.category %}
+
+{% block page_content %}
+<ol class="breadcrumb">
+	<li><a href="{{ url_for('main.category_courses', id=category.id) }}">{{ category.name }}</a></li>
+	<li class="active">{{ course.name }}</li>
+</ol>
+<div class="page-header">
+    <h1>课程基本信息</h1>
+    <p>课程名称：{{ course.name }}</p>
+    <p>授课教师：{{ course.teacher_name }}</p>
+    <p>课程类别：{{ course.category.name }}</p>
+    <p>关于课程：{{ course.about_course }}</p>
+    <a class="btn btn-danger" href="{{ url_for('admin.course_moderate', course_id=course.id) }}">修改课程信息</a>
+    <a class="btn btn-danger" href="{{ url_for('admin.chapter_add', course_id=course.id) }}">添加新的章节</a>
+</div>
+<div class="dropdown">
+    <button type="button" class="btn dropdown-toggle" id="dropdownMenu2" data-toggle="dropdown">选择章节
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu2">
+        {% for chapter in chapters %}
+        <li role="presentation">
+            <a role="menuitem" tabindex="-1" href="{{ url_for('main.show_course', course_id=course.id, chapter_index=chapter.index) }}">
+                第{{ chapter.index }}章 {{ chapter.name }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% if display_chapter %}
+<div>
+    <p>第{{ display_chapter.index }}章 {{ display_chapter.name }}</p>
+    <p>关于本章：{{ display_chapter.about_chapter }}</p>
+    <a class="btn btn-default" href="{{ url_for('main.show_chapter', course_id=course.id, chapter_index=display_chapter.index) }}">学习本章</a>
+    <a class="btn btn-danger"
+       href="{{ url_for('admin.chapter_moderate', course_id=course.id, chapter_index=display_chapter.index) }}">修改章节信息</a>
+    <a class="btn btn-danger"
+       href="{{ url_for('admin.chapter_delete', chapter_id=display_chapter.id) }}">删除该章节</a>
+</div>
+{% endif %}
+{% endblock %}
