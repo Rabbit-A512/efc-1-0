@@ -94,10 +94,10 @@ def course_moderate(course_id):
 @permission_required(Permission.MODERATE_COURSES)
 def course_delete(course_id):
     course = Course.query.get_or_404(course_id)
-    courses = course.category.courses
+    category = course.category
     db.session.delete(course)
     flash('该课程已经完全删除。')
-    return render_template('category-courses.html', courses=courses)
+    return render_template('category-courses.html', category=category)
 
 
 @admin.route('/chapter-add/<int:course_id>', methods=['GET', 'POST'])
@@ -151,6 +151,9 @@ def chapter_delete(chapter_id):
     chapter = Chapter.query.get_or_404(chapter_id)
     index = chapter.index + 1
     course = chapter.course
+    if course.chapters.count() == 1:
+        flash('第一章内容默认不能删除，请直接修改第一章节内容或完全删除该课程。')
+        return redirect(url_for('main.show_course', course_id=course.id, chapter_index=1))
     db.session.delete(chapter)
     db.session.commit()
     chapters = course.chapters

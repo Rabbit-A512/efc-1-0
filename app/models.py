@@ -38,16 +38,16 @@ class Role(db.Model):
     @staticmethod
     def insert_roles():
         roles = {
-            'User': (Permission.CHECK_DOWNLOAD |
+            '普通用户': (Permission.CHECK_DOWNLOAD |
                      Permission.COMMENT, True),
-            'Moderator': (Permission.CHECK_DOWNLOAD |
+            '课程信息管理员': (Permission.CHECK_DOWNLOAD |
                           Permission.COMMENT |
                           Permission.MODERATE_COMMENTS |
                           Permission.MODERATE_COURSES, False),
-            'Leader': (Permission.CHECK_DOWNLOAD |
+            '校领导': (Permission.CHECK_DOWNLOAD |
                        Permission.COMMENT |
                        Permission.QUERY_STATISTICS, False),
-            'Administrator': (0xff, False)
+            '系统管理员': (0xff, False)
         }
         for r in roles:
             role = Role.query.filter_by(name=r).first()

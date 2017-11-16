@@ -4,6 +4,7 @@
 
 {% block page_content %}
 <ol class="breadcrumb">
+    <li><a href="{{ url_for('main.index', id=category.id) }}">所有类别</a></li>
 	<li><a href="{{ url_for('main.category_courses', id=category.id) }}">{{ category.name }}</a></li>
 	<li class="active">{{ course.name }}</li>
 </ol>
@@ -13,8 +14,10 @@
     <p>授课教师：{{ course.teacher_name }}</p>
     <p>课程类别：{{ course.category.name }}</p>
     <p>关于课程：{{ course.about_course }}</p>
+    {% if current_user.can(Permission.MODERATE_COURSES) %}
     <a class="btn btn-danger" href="{{ url_for('admin.course_moderate', course_id=course.id) }}">修改课程信息</a>
     <a class="btn btn-danger" href="{{ url_for('admin.chapter_add', course_id=course.id) }}">添加新的章节</a>
+    {% endif %}
 </div>
 <div class="dropdown">
     <button type="button" class="btn dropdown-toggle" id="dropdownMenu2" data-toggle="dropdown">选择章节
@@ -34,10 +37,12 @@
     <p>第{{ display_chapter.index }}章 {{ display_chapter.name }}</p>
     <p>关于本章：{{ display_chapter.about_chapter }}</p>
     <a class="btn btn-default" href="{{ url_for('main.show_chapter', course_id=course.id, chapter_index=display_chapter.index) }}">学习本章</a>
+    {% if current_user.can(Permission.MODERATE_COURSES) %}
     <a class="btn btn-danger"
        href="{{ url_for('admin.chapter_moderate', course_id=course.id, chapter_index=display_chapter.index) }}">修改章节信息</a>
     <a class="btn btn-danger"
        href="{{ url_for('admin.chapter_delete', chapter_id=display_chapter.id) }}">删除该章节</a>
+    {% endif %}
 </div>
 {% endif %}
 {% endblock %}

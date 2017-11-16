@@ -1,6 +1,6 @@
 {% extends "bootstrap/base.html" %}
 
-{% block title %}EFC{% endblock %}
+{% block title %}EFC - Effective Free Courses{% endblock %}
 
 {% block head %}
 {{ super() }}
@@ -40,18 +40,21 @@
                         <li><a href="{{ url_for('admin.category_add') }}">添加课程类别</a></li>
                         <li><a href="{{ url_for('admin.category_delete') }}">删除课程类别</a></li>
                         <li><a href="{{ url_for('admin.course_add') }}">添加课程</a></li>
+                        {% if current_user.can(Permission.FREEZE) %}
                         <li><a href="{{ url_for('admin.check_freeze') }}">查看冻结用户</a></li>
+                        {% endif %}
                     </ul>
 	            </li>
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated %}
-                <li><a href="{{ url_for('auth.logout') }}">Sign Out</a></li>
+                <li><a href="{{ url_for('auth.logout') }}">注销</a></li>
                 <li><a href="{{ url_for('auth.change_password') }}">修改密码</a> </li>
                 <li><a href="{{ url_for('auth.change_email') }}">更换邮箱</a> </li>
                 {% else %}
-                <li><a href="{{ url_for('auth.login') }}">Sign In</a> </li>
+                <li><a href="{{ url_for('auth.login') }}">登录</a></li>
+                <li><a href="{{ url_for('auth.register') }}">注册</a></li>
                 {% endif %}
             </ul>
         </div>

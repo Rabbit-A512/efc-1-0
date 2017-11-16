@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}InsaneImage{% endblock %}
+{% block title %}EFC - Effective Free Courses{% endblock %}
 
 {% block page_content %}
 <div class="page-header">
@@ -17,19 +17,38 @@
     <h3><p>点击你想学习的课程类别，寻找属于你的课程并立刻开始学习！</p></h3>
     {% endif %}
 </div>
-{% if current_user.is_authenticated %}
-<div class="dropdown">
-    <button type="button" class="btn dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">课程分类
-        <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+<!--{% if current_user.is_authenticated %}-->
+<!--<div class="dropdown">-->
+    <!--<button type="button" class="btn dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">课程分类-->
+        <!--<span class="caret"></span>-->
+    <!--</button>-->
+    <!--<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">-->
+        <!--{% for category in categories %}-->
+        <!--<li role="presentation">-->
+            <!--<a role="menuitem" tabindex="-1" href="{{ url_for('main.category_courses', id=category.id) }}">{{ category.name }}</a>-->
+            <!--{% if current_user.can(Permission.MODERATE_COURSES) %}-->
+            <!--<a class="btn btn-danger" href="{{ url_for('admin.category_moderate', id=category.id) }}">修改课程类别信息</a>-->
+            <!--{% endif %}-->
+        <!--</li>-->
+        <!--{% endfor %}-->
+    <!--</ul>-->
+<!--</div>-->
+<div class="page-header">
+    {% if categories %}
+    <h3>所有类别</h3>
+    <ul class="list-inline">
         {% for category in categories %}
-        <li role="presentation">
-            <a role="menuitem" tabindex="-1" href="{{ url_for('main.category_courses', id=category.id) }}">{{ category.name }}</a>
+        <li>
+            <a class="btn btn-default" href="{{ url_for('main.category_courses', id=category.id) }}">{{ category.name }}</a>
+            {% if current_user.can(Permission.MODERATE_COURSES) %}
             <a class="btn btn-danger" href="{{ url_for('admin.category_moderate', id=category.id) }}">修改课程类别信息</a>
+            {% endif %}
         </li>
         {% endfor %}
     </ul>
+    {% else %}
+    <h1>目前没有任何课程，相关内容正在施工中。</h1>
+    {% endif %}
 </div>
 {% endif %}
 <p class="text-center"><a href="{{ url_for('main.info') }}">关于我们</a></p>

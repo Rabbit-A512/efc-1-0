@@ -2,7 +2,7 @@ from datetime import datetime
 from flask import render_template, session, redirect, url_for, current_app, abort, flash, request
 from flask_login import login_required, current_user
 from . import main
-from .forms import UploadForm, EditProfileForm, EditProfileAdminForm, CommentForm
+from .forms import EditProfileForm, EditProfileAdminForm, CommentForm
 from .. import db, photos
 from ..models import User, Role, Permission, Category, Course, Chapter, Comment
 from ..decorators import admin_required, permission_required
@@ -96,8 +96,7 @@ def edit(comment_id):
 @permission_required(Permission.CHECK_DOWNLOAD)
 def category_courses(id):
     category = Category.query.get(id)
-    courses = category.courses.order_by(Course.name).all()
-    return render_template('category-courses.html', courses=courses)
+    return render_template('category-courses.html', category=category)
 
 
 @main.route('/courses/<int:course_id>/<int:chapter_index>')
