@@ -5,10 +5,10 @@
 	<li><a href="{{ url_for('main.index', id=category.id) }}">所有类别</a></li>
 	<li class="active">{{ category.name }}</li>
 </ol>
-{% for course in category.courses %}
 <div class="page-header">
-    <h1>{{ course.category.name }}</h1>
+    <h1>{{ category.name }}</h1>
 </div>
+{% for course in category.courses %}
 <ul class="list-inline">
     <li><a href="{{ url_for('main.show_course', course_id=course.id, chapter_index=1) }}">{{ course.name }}</a></li>
     {% if current_user.can(Permission.MODERATE_COURSES) %}
