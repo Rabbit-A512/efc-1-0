@@ -3,7 +3,7 @@ from flask import render_template, session, redirect, url_for, current_app, abor
 from flask_login import login_required, current_user
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, CommentForm
-from .. import db, photos
+from .. import db, videos, outlines
 from ..models import User, Role, Permission, Category, Course, Chapter, Comment
 from ..decorators import admin_required, permission_required
 from os import remove
@@ -138,6 +138,8 @@ def show_chapter(course_id, chapter_index):
     return render_template('show-chapter.html',
                            form=form,
                            display_chapter=display_chapter,
+                           video_url=videos.url(display_chapter.video_filename),
+                           outline_url=outlines.url(display_chapter.outline_filename),
                            comments=comments,
                            pagination=pagination)
 

@@ -15,7 +15,16 @@
 	<li class="active">第{{ display_chapter.index }}章</li>
 </ol>
 <div class="page-header">
-    <h1>第{{ display_chapter.index }}章</h1>
+    <h1>第{{ display_chapter.index }}章 {{ display_chapter.name }}</h1>
+    {% if video_url %}
+    <br><video controls autoplay name="media">
+         <source src="{{ video_url }}" type="video/mp4">
+    </video>
+    <br><a href="{{ video_url }}" download>点击下载视频文件</a>
+    {% endif %}
+    {% if outline_url %}
+    <br><a href="{{ outline_url }}" download>点击下载PDF大纲文件</a>
+    {% endif %}
     <p>关于本章：{{ display_chapter.about_chapter }}</p>
     <a class="btn btn-default"
        href="{{ url_for('main.show_chapter',
@@ -46,6 +55,7 @@
             </a>
         </div>
         <div class="pull-right">{{ moment(comment.timestamp).fromNow() }}</div>
+        {% if comment.enabled %}
         <div>
             {% if comment.body_html %}
                 {{ comment.body_html | safe }}
@@ -53,14 +63,24 @@
                 {{ comment.body }}
             {% endif %}
         </div>
+        {% else %}
+        <div>
+            评论尚未通过审核，请联系管理员。
+        </div>
+        {% endif %}
         <div class="pull-right">
-            {% if current_user == comment.author %}
+            {% if current_user.can(Permission.MODERATE_COMMENTS) %}
+            <a href="{{ url_for('.edit', comment_id=comment.id) }}">
+                <span class="label label-danger">查看和编辑[管理员]</span>
+            </a>
+            {% if not comment.enabled %}
+            <a href="{{ url_for('admin.enable_comment', comment_id=comment.id) }}">
+                <span class="label label-danger">审核通过[管理员]</span>
+            </a>
+            {% endif %}
+            {% elif current_user == comment.author %}
             <a href="{{ url_for('.edit', comment_id=comment.id) }}">
                 <span class="label label-primary">编辑</span>
-            </a>
-            {% elif current_user.can(Permission.MODERATE_COMMENTS) %}
-            <a href="{{ url_for('.edit', comment_id=comment.id) }}">
-                <span class="label label-danger">编辑[管理员]</span>
             </a>
             {% endif %}
         </div>

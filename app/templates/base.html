@@ -43,6 +43,9 @@
                         {% if current_user.can(Permission.FREEZE) %}
                         <li><a href="{{ url_for('admin.check_freeze') }}">查看冻结用户</a></li>
                         {% endif %}
+                        {% if current_user.can(Permission.MODERATE_COMMENTS) %}
+                        <li><a href="{{ url_for('admin.check_comments') }}">查看待审核评论</a></li>
+                        {% endif %}
                     </ul>
 	            </li>
                 {% endif %}

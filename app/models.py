@@ -214,6 +214,8 @@ class Chapter(db.Model):
     name = db.Column(db.String(64))
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
     about_chapter = db.Column(db.Text())
+    video_filename = db.Column(db.Text())
+    outline_filename = db.Column(db.Text())
 
     prev_index = db.Column(db.Integer)
     next_index = db.Column(db.Integer)
@@ -236,6 +238,7 @@ class Comment(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     chapter_id = db.Column(db.Integer, db.ForeignKey('chapters.id'))
+    enabled = db.Column(db.Boolean, default=False)
 
     @staticmethod
     def generate_fake(count=100):

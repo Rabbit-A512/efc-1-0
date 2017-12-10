@@ -4,9 +4,10 @@ from flask_mail import Mail
 from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from flask_uploads import UploadSet, IMAGES, configure_uploads, patch_request_class
+from flask_uploads import UploadSet, IMAGES, configure_uploads, patch_request_class, ALL
 from flask_pagedown import PageDown
 from config import config
+import logging
 import pymysql
 pymysql.install_as_MySQLdb()
 
@@ -14,7 +15,8 @@ bootstrap = Bootstrap()
 mail = Mail()
 moment = Moment()
 db = SQLAlchemy()
-photos = UploadSet('photos', IMAGES)
+videos = UploadSet('videos', extensions=('mp4'))
+outlines = UploadSet('outlines', extensions=('pdf'))
 pagedown = PageDown()
 
 login_manager = LoginManager()
@@ -34,8 +36,16 @@ def create_app(config_name):
     login_manager.init_app(app)
     pagedown.init_app(app)
 
-    configure_uploads(app, photos)
-    patch_request_class(app)
+    configure_uploads(app, videos)
+    configure_uploads(app, outlines)
+    patch_request_class(app, 100*1024*1024)
+
+    handler = logging.FileHandler('efc.log', encoding='UTF-8')
+    handler.setLevel(logging.INFO)
+    logging_format = logging.Formatter(
+        '%(asctime)s - %(levelname)s - %(message)s')
+    handler.setFormatter(logging_format)
+    app.logger.addHandler(handler)
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)

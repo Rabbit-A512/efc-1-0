@@ -1,7 +1,9 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import StringField, SubmitField, SelectField, TextAreaField, IntegerField
 from wtforms.validators import DataRequired, Length, Regexp, ValidationError
 from ..models import Category, Chapter
+from .. import videos, outlines
 
 
 class CategoryAddForm(FlaskForm):
@@ -74,3 +76,9 @@ class ChapterModerateForm(FlaskForm):
     name = StringField('章节名称', validators=[Length(1, 64)])
     about_chapter = TextAreaField('关于本章')
     submit = SubmitField('修改')
+
+
+class ChapterUploadForm(FlaskForm):
+    video = FileField(validators=[FileAllowed(videos, '只能上传mp4格式的视频，大小不超过100M'), FileRequired('请选择文件')])
+    outline = FileField(validators=[FileAllowed(outlines, '只能上传pdf格式的文件，大小不超过100'), FileRequired('请选择文件')])
+    submit = SubmitField('上传')

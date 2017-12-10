@@ -10,7 +10,11 @@
             </a>
         </div>
         <div class="pull-right">{{ moment(comment.timestamp).fromNow() }}</div>
+        {% if comment.enabled %}
         <div>{{ comment.body }}</div>
+        {% else %}
+        <div>该评论尚未通过审核，请联系管理员</div>
+        {% endif %}
         <div>课程名称：{{ comment.chapter.course.name }}</div>
         <div>章节名称：{{ comment.chapter.name }}</div>
         <hr>

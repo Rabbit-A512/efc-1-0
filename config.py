@@ -4,7 +4,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     SECRET_KEY = 'easy to guess string'
-    UPLOADED_PHOTOS_DEST = basedir
+    UPLOADED_VIDEOS_DEST = os.path.join(basedir, 'videos')
+    UPLOADED_OUTLINES_DEST = os.path.join(basedir, 'outlines')
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     EFC_MAIL_SUBJECT_PREFIX = '[EFC]'
     EFC_MAIL_SENDER = 'EFC Admin <2654525303@qq.com>'
