@@ -61,7 +61,7 @@ def course_add():
     form = CourseAddForm()
     if form.validate_on_submit():
         course = Course(name=form.name.data,
-                        category=Category.query.get(form.category.data),
+                        category_id=form.category.data,
                         teacher_name=form.teacher_name.data,
                         about_course=form.about_course.data)
         db.session.add(course)
