@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<ul>
+    {% for comment in comments %}
+    <li>
+        <div>
+            <a href="{{ url_for('main.user', username=comment.author.username) }}">
+                <img class="img-rounded" src="{{ comment.author.gravatar(size=40) }}">
+            </a>
+            <a href="{{ url_for('main.user', username=comment.author.username) }}">
+                {{ comment.author.username }}
+            </a>
+        </div>
+        <div class="pull-right">{{ moment(comment.timestamp).fromNow() }}</div>
+        {% if comment.enabled %}
+        <div>
+            {% if comment.body_html %}
+                {{ comment.body_html | safe }}
+            {% else %}
+                {{ comment.body }}
+            {% endif %}
+        </div>
+        {% else %}
+        <div>
+            评论尚未通过审核，请联系管理员。
+        </div>
+        {% endif %}
+        <div class="pull-right">
+            {% if current_user.can(Permission.MODERATE_COMMENTS) %}
+            <a href="{{ url_for('main.edit', comment_id=comment.id) }}">
+                <span class="label label-danger">查看和编辑[管理员]</span>
+            </a>
+            {% if not comment.enabled %}
+            <a href="{{ url_for('admin.enable_comment_shortcut', comment_id=comment.id) }}">
+                <span class="label label-danger">审核通过[管理员]</span>
+            </a>
+            {% endif %}
+            {% elif current_user == comment.author %}
+            <a href="{{ url_for('.edit', comment_id=comment.id) }}">
+                <span class="label label-primary">编辑</span>
+            </a>
+            {% endif %}
+        </div>
+        <hr>
+    </li>
+    {% endfor %}
+</ul>
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.show_chapter', course_id=course.id, chapter_index=display_chapter.index) }}
+</div>
+{% endif %}
+{% endblock %}

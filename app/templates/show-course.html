@@ -17,6 +17,7 @@
     {% if current_user.can(Permission.MODERATE_COURSES) %}
     <a class="btn btn-danger" href="{{ url_for('admin.course_moderate', course_id=course.id) }}">修改课程信息</a>
     <a class="btn btn-danger" href="{{ url_for('admin.chapter_add', course_id=course.id) }}">添加新的章节</a>
+    <a class="btn btn-primary" href="{{ url_for('main.check_statistics', course_id=course.id) }}">查看本课程统计信息</a>
     {% endif %}
 </div>
 <div class="dropdown">

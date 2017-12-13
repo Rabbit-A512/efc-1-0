@@ -115,6 +115,9 @@ def show_course(course_id, chapter_index):
 def show_chapter(course_id, chapter_index):
     course = Course.query.get_or_404(course_id)
     display_chapter = course.chapters.filter_by(index=chapter_index).first()
+    display_chapter.access_sum += 1
+    db.session.add(display_chapter)
+    db.session.commit()
     if not display_chapter:
         if chapter_index == 0:
             display_chapter = course.chapters.first()
@@ -151,8 +154,15 @@ def show_chapter(course_id, chapter_index):
                            pagination=pagination)
 
 
-@main.route('/videos/<video_filename>')
+@main.route('/statistics/courses/<int:course_id>')
 @login_required
-@permission_required(Permission.CHECK_DOWNLOAD)
-def download_video(video_filename):
-    return send_from_directory(current_app.config['UPLOADED_VIDEOS_DEST'], video_filename)
+@permission_required(Permission.QUERY_STATISTICS)
+def check_statistics(course_id):
+    course = Course.query.get(course_id)
+    chapters = course.chapters
+    comment_sum = 0
+    access_sum = 0
+    for chapter in chapters:
+        comment_sum += chapter.comments.count()
+        access_sum += chapter.access_sum
+    return render_template('show-course-statistics.html', course=course, comment_sum=comment_sum, access_sum=access_sum)

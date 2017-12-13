@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% set category = course.category %}
+
+{% block page_content %}
+<ol class="breadcrumb">
+    <li><a href="{{ url_for('main.index', id=category.id) }}">所有类别</a></li>
+	<li><a href="{{ url_for('main.category_courses', id=category.id) }}">{{ category.name }}</a></li>
+	<li class="active">{{ course.name }}</li>
+</ol>
+<div class="page-header">
+    <h1>课程基本信息</h1>
+    <p>课程名称：{{ course.name }}</p>
+    <p>授课教师：{{ course.teacher_name }}</p>
+    <p>课程类别：{{ course.category.name }}</p>
+    <p>关于课程：{{ course.about_course }}</p>
+    <p>课程评论总数：{{ comment_sum }}</p>
+    <p>课程访问总数：{{ access_sum }}
+</div>
+<div>
+    {% for chapter in course.chapters %}
+    <p>章节名称：第{{ chapter.index }}章 {{ chapter.name }}</p>
+    <p>本章节评论总数：{{ chapter.comments.count() }}</p>
+    <p>本章节访问总数：{{ chapter.access_sum }}</p>
+    <br>
+    {% endfor %}
+</div>
+{% endblock %}

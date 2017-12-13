@@ -33,6 +33,7 @@ def category_moderate(id):
     if form.validate_on_submit():
         category.name = form.name.data
         db.session.add(category)
+        db.session.commit()
         current_app.logger.info('管理员*{}*\n修改了类别信息*{}*'.format(current_user._get_current_object().email,
                                                           category.name))
         flash('类别信息已被修改。')
@@ -50,6 +51,7 @@ def category_delete():
         current_app.logger.warning('管理员*{}*\n删除了课程类别*{}*的所有内容'.format(current_user._get_current_object().email,
                                                             category.name))
         db.session.delete(category)
+        db.session.commit()
         flash('该类别的所有课程已经删除。')
         return redirect(url_for('main.index'))
     return render_template('admin/category-delete.html', form=form)
@@ -72,6 +74,7 @@ def course_add():
                           course=course,
                           about_chapter='默认内容')
         db.session.add(chapter)
+        db.session.commit()
         current_app.logger.info('管理员*{}*\n添加了*{}*类别的新课程*{}*'.format(current_user._get_current_object().email,
                                                                                Category.query.get(course.category_id).name,
                                                                      course.name))
@@ -91,6 +94,7 @@ def course_moderate(course_id):
         course.teacher_name = form.teacher_name.data
         course.about_course = form.about_course.data
         db.session.add(course)
+        db.session.commit()
         current_app.logger.info('管理员*{}*\n修改了*{}*类别的*{}*课程的信息'.format(current_user._get_current_object().email,
                                                                       Category.query.get(course.category_id).name,
                                                                       course.name))
@@ -112,6 +116,7 @@ def course_delete(course_id):
                                                                     category,
                                                                     course.name))
     db.session.delete(course)
+    db.session.commit()
     flash('该课程已经完全删除。')
     return render_template('category-courses.html', category=category)
 
@@ -140,6 +145,7 @@ def chapter_add(course_id):
                           course=Course.query.get(course_id),
                           about_chapter=form.about_chapter.data)
         db.session.add(chapter)
+        db.session.commit()
         current_app.logger.info('管理员*{}*\n添加了新的章节*{}*至课程*{}*'.format(current_user._get_current_object().email,
                                                                      '第{}章 '.format(chapter.index) + chapter.name,
                                                                        course.name))
@@ -159,6 +165,7 @@ def chapter_moderate(course_id, chapter_index):
         chapter.name = form.name.data
         chapter.about_chapter = form.about_chapter.data
         db.session.add(chapter)
+        db.session.commit()
         current_app.logger.info('管理员*{}*\n修改了课程*{}*的*{}*的章节信息'.format(current_user._get_current_object().email,
                                                                        Course.query.get(chapter.course_id).name,
                                                                         '第{}章 '.format(chapter.index) + chapter.name))
@@ -177,6 +184,7 @@ def chapter_moderate(course_id, chapter_index):
                                                  name='{}-chapter{}-{}.'.format(course.name, chapter.index,
                                                                                 chapter.name))
         db.session.add(chapter)
+        db.session.commit()
         current_app.logger.info('管理员*{}*\n修改了课程*{}*的*{}*的相关文件'.format(current_user._get_current_object().email,
                                                                       Course.query.get(chapter.course_id).name,
                                                                       '第{}章 '.format(chapter.index) + chapter.name))
@@ -220,6 +228,8 @@ def chapter_delete(chapter_id):
 def freeze(user_id):
     user = User.query.get_or_404(user_id)
     user.role.permissions -= Permission.COMMENT
+    db.session.add(user)
+    db.session.commit()
     flash('用户已被冻结。')
     return redirect(url_for('main.user', username=user.username))
 
@@ -229,6 +239,8 @@ def freeze(user_id):
 def unfreeze(user_id):
     user = User.query.get_or_404(user_id)
     user.role.permissions += Permission.COMMENT
+    db.session.add(user)
+    db.session.commit()
     flash('用户已解除冻结。')
     return redirect(url_for('main.user', username=user.username))
 
@@ -249,6 +261,7 @@ def enable_comment(comment_id):
     comment = Comment.query.get(comment_id)
     comment.enabled = True
     db.session.add(comment)
+    db.session.commit()
     flash('评论审核通过。')
     chapter = Chapter.query.get(comment.chapter_id)
     return redirect(url_for('main.show_chapter', course_id=chapter.course_id, chapter_index=chapter.index))
@@ -267,5 +280,6 @@ def enable_comment_shortcut(comment_id):
     comment = Comment.query.get(comment_id)
     comment.enabled = True
     db.session.add(comment)
+    db.session.commit()
     flash('评论审核通过。')
     return redirect(url_for('admin.check_comments'))

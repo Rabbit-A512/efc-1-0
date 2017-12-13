@@ -216,6 +216,7 @@ class Chapter(db.Model):
     about_chapter = db.Column(db.Text())
     video_filename = db.Column(db.Text(), default='null')
     outline_filename = db.Column(db.Text(), default='null')
+    access_sum = db.Column(db.Integer, default=0)
 
     prev_index = db.Column(db.Integer)
     next_index = db.Column(db.Integer)
