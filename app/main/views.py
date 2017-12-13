@@ -115,9 +115,6 @@ def show_course(course_id, chapter_index):
 def show_chapter(course_id, chapter_index):
     course = Course.query.get_or_404(course_id)
     display_chapter = course.chapters.filter_by(index=chapter_index).first()
-    display_chapter.access_sum += 1
-    db.session.add(display_chapter)
-    db.session.commit()
     if not display_chapter:
         if chapter_index == 0:
             display_chapter = course.chapters.first()
@@ -125,6 +122,9 @@ def show_chapter(course_id, chapter_index):
         else:
             display_chapter = course.chapters.filter_by(index=chapter_index - 1).first()
             flash('已经是最后一章。')
+    display_chapter.access_sum += 1
+    db.session.add(display_chapter)
+    db.session.commit()
 
     form = CommentForm()
     if current_user.can(Permission.COMMENT) and form.validate_on_submit():
