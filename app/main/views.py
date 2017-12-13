@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, current_app, abort, flash, request
+from flask import render_template, session, redirect, url_for, current_app, abort, flash, request, send_from_directory
 from flask_login import login_required, current_user
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, CommentForm
@@ -135,11 +135,24 @@ def show_chapter(course_id, chapter_index):
         page, per_page=current_app.config['EFC_COMMENTS_PER_PAGE'], error_out=False
     )
     comments = pagination.items
+
+    video_url = '#'
+    outline_url = '#'
+    if exists(videos.path(display_chapter.video_filename)):
+        video_url = videos.url(display_chapter.video_filename)
+    if exists(outlines.path(display_chapter.outline_filename)):
+        outline_url = outlines.url(display_chapter.outline_filename)
     return render_template('show-chapter.html',
                            form=form,
                            display_chapter=display_chapter,
-                           video_url=videos.url(display_chapter.video_filename),
-                           outline_url=outlines.url(display_chapter.outline_filename),
+                           video_url=video_url,
+                           outline_url=outline_url,
                            comments=comments,
                            pagination=pagination)
 
+
+@main.route('/videos/<video_filename>')
+@login_required
+@permission_required(Permission.CHECK_DOWNLOAD)
+def download_video(video_filename):
+    return send_from_directory(current_app.config['UPLOADED_VIDEOS_DEST'], video_filename)

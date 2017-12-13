@@ -165,8 +165,8 @@ def chapter_moderate(course_id, chapter_index):
         flash('章节信息已被修改。')
         return redirect(url_for('main.show_course', course_id=course_id, chapter_index=chapter_index))
     if form2.validate_on_submit():
-        video_path = videos.path(chapter.video_filename)
-        outline_path = outlines.path(chapter.outline_filename)
+        video_path = os.path.join(videos.path(chapter.video_filename), chapter.video_filename)
+        outline_path = os.path.join(outlines.path(chapter.outline_filename), chapter.outline_filename)
         if os.path.exists(video_path):
             os.remove(video_path)
         if os.path.exists(outline_path):

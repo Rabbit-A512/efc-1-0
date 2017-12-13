@@ -214,8 +214,8 @@ class Chapter(db.Model):
     name = db.Column(db.String(64))
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
     about_chapter = db.Column(db.Text())
-    video_filename = db.Column(db.Text())
-    outline_filename = db.Column(db.Text())
+    video_filename = db.Column(db.Text(), default='null')
+    outline_filename = db.Column(db.Text(), default='null')
 
     prev_index = db.Column(db.Integer)
     next_index = db.Column(db.Integer)
