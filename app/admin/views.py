@@ -227,7 +227,7 @@ def chapter_delete(chapter_id):
 @admin_required
 def freeze(user_id):
     user = User.query.get_or_404(user_id)
-    user.role.permissions -= Permission.COMMENT
+    user.can_comment = False
     db.session.add(user)
     db.session.commit()
     flash('用户已被冻结。')
@@ -238,7 +238,7 @@ def freeze(user_id):
 @admin_required
 def unfreeze(user_id):
     user = User.query.get_or_404(user_id)
-    user.role.permissions += Permission.COMMENT
+    user.can_comment = True
     db.session.add(user)
     db.session.commit()
     flash('用户已解除冻结。')
@@ -250,7 +250,7 @@ def unfreeze(user_id):
 def check_freeze():
     frozen_users = []
     for user in User.query.all():
-        if not user.can(Permission.COMMENT):
+        if not user.can_comment:
             frozen_users.append(user)
     return render_template('show-frozen-users.html', frozen_users=frozen_users)
 

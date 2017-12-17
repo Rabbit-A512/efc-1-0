@@ -36,7 +36,7 @@
        chapter_index=display_chapter.next_index) }}">后一章</a>
 </div>
 <div>
-    {% if current_user.can(Permission.COMMENT) %}
+    {% if current_user.can_comment %}
     {{ wtf.quick_form(form) }}
     {% else %}
     <h3 class="text-danger">你已经被冻结，无法回复。请联系管理员解除冻结。</h3>

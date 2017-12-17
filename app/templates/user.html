@@ -31,7 +31,7 @@
     <a class="btn btn-danger" href="{{ url_for('.edit_profile_admin', id=user.id) }}">
         Edit Profile [Admin]
     </a>
-        {% if user.can(Permission.COMMENT) %}
+        {% if user.can_comment %}
         <a class="btn btn-danger" href="{{ url_for('admin.freeze', user_id=user.id) }}">冻结用户</a>
         {% else %}
         <a class="btn btn-danger" href="{{ url_for('admin.unfreeze', user_id=user.id) }}">解除冻结</a>
