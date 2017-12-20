@@ -2,7 +2,7 @@ from flask import render_template, redirect, request, url_for, flash
 from flask_login import login_user, login_required, logout_user, current_user
 from . import auth
 from ..models import User
-from .forms import LoginForm, RegistrationForm, EmailConfirmationForm, FindPasswordForm, ChangePasswordForm
+from .forms import LoginForm, RegistrationForm, EmailConfirmationForm, FindPasswordForm, ChangePasswordForm, EmailConfirmationForm2
 from .. import db
 from ..email import send_email
 import hashlib
@@ -102,6 +102,20 @@ def change_password():
 @auth.route('/wait_for_confirmation', methods=['GET', 'POST'])
 def wait_for_confirmation():
     form = EmailConfirmationForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user is not None:
+            token = user.generate_confirmation_token()
+            send_email(user.email, 'Confirm Your Account', 'auth/email/find_password', user=user, token=token)
+            flash('A confirmation email has been sent to your email address. Check it out!')
+        else:
+            flash('Invalid email. Maybe you have not registered yet.')
+    return render_template('auth/wait_for_confirmation.html', form=form)
+
+
+@auth.route('/wait_for_confirmation_find', methods=['GET', 'POST'])
+def wait_for_confirmation_find():
+    form = EmailConfirmationForm2()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user is not None:
