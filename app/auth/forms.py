@@ -50,3 +50,7 @@ class FindPasswordForm(FlaskForm):
 class EmailConfirmationForm(FlaskForm):
     email = StringField('电子邮箱', validators=[DataRequired(), Length(1, 64), Email()])
     submit = SubmitField('发送')
+
+    def validate_email(self, field):
+        if User.query.filter_by(email=field.data).first():
+            raise ValidationError('邮箱已被使用')

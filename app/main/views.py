@@ -21,6 +21,11 @@ def info():
     return render_template('info.html')
 
 
+@main.route('/help')
+def help():
+    return render_template('help.html')
+
+
 @main.route('/user/<username>')
 def user(username):
     user = User.query.filter_by(username=username).first()
