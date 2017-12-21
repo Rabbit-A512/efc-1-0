@@ -25,7 +25,7 @@ class DevelopmentConfig(Config):
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME') or '2654525303@qq.com'
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') or 'bcubvkliojieeadb'
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') or 'seszajmmsuofeabe'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
                               'mysql://root:123@localhost:3306/efc?charset=utf8mb4'
 
