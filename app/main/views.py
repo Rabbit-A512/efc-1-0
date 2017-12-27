@@ -23,7 +23,7 @@ def info():
 
 @main.route('/help')
 def help():
-    return render_template('help.html')
+    return render_template('garp_api.html')
 
 
 @main.route('/user/<username>')

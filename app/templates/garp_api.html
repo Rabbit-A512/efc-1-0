@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}GARP - API{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>GARP - API</h1>
+    <h3>API前缀：http://120.78.155.210:5001/api/v1.0</h3>
+    <h3 class="text-warning">认证部分api没有变</h3>
+    <p>发送请求流程：passenger1发送ride_request -> driver2发送driver_check发现有目的地且是passenger1 -> driver2发送get_on_confirm请求确认passenger1上车
+     -> passenger2发送ride_request -> driver2发送driver_check发现有目的地且是passenger2 -> driver2发送get_on_confirm请求确认passenger2上车
+        -> driver2发送driver_location POST请求改变坐标位置至passenger1的目的地
+        -> passenger1发送pay POST请求支付订单
+        -> driver2发送driver_location POST请求改变坐标位置至passenger2的目的地
+        -> passenger2发送pay POST请求支付订单</p>
+</div>
+<div>
+<p class="text-primary">POST /enable_drivers</p>
+<p>作用：重置数据库</p>
+    <p>输入：无</p>
+    <p>输出：
+    {
+    "available": "All drivers are available."
+    }
+</p>
+<br>
+<p class="text-primary">POST /ride_request/&lt;int:passenger_id&gt;</p>
+    <p>作用：某个乘客发出拼车请求</p>
+    <p>输入：(int)passenger_id</p>
+    <p>输出：{
+    "driver_id": 2
+}（成功选择一个司机）
+</p>
+<br>
+<p class="text-primary">GET /driver_check/&lt;int:driver_id&gt;</p>
+<p>作用：司机查看当前目的地队列</p>
+    <p>输入：(int)driver_id</p>
+    <p>输出：{
+    "destination": [
+        [
+            "102.850828,24.824721",
+            0,
+            1
+        ],
+        [
+            "102.855005,24.825939",
+            1,
+            1
+        ]
+    ],
+    "heading": false,
+    "picking": true
+}
+
+</p>
+<br>
+<p class="text-primary">POST /get_on_confirm/&lt;int:driver_id&gt;</p>
+    <p>作用：picking状态的司机到达当前乘客坐标时，确认乘客上车</p>
+    <p>输入：(int)driver_id</p>
+    <p>输出：{
+    "destination": [
+        [
+            "102.855005,24.825939",
+            1,
+            1
+        ]
+    ]
+}
+
+</p>
+<br>
+<p class="text-primary">POST /pay/&lt;int:order_id&gt;</p>
+    <p>作用：picking状态的司机到达当前乘客坐标时，确认乘客上车</p>
+    <p>输入：(int)order_id</p>
+    <p>输出：{
+    "driver_balance": 0.0,
+    "driver_id": 2,
+    "order_id": 1,
+    "passenger_balance": 1000.0,
+    "passenger_id": 1
+}
+
+</p>
+</div>
+
+{% endblock %}
